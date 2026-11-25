@@ -8,6 +8,7 @@
 <script src="app.js" defer></script>
 </head>
 <body>
+<div id="backgroundLights" aria-hidden="true"></div>
 <header><span>Výuková simulace</span><div class="tools"><button id="settings" aria-label="Nastavení" title="Nastavení">⚙</button><button id="quit" hidden>Ukončit hru</button></div></header>
 <main>
 <h1><span>Mladej Volant</span><br><span class="title-accent">Automat</span></h1>
@@ -32,6 +33,9 @@
 <label class="check"><input id="showCredit" type="checkbox"> Kredit</label>
 <label class="check"><input id="showBet" type="checkbox"> Cena jednoho zatočení během hry</label>
 <label class="check"><input id="showPaid" type="checkbox"> Poslední výplata</label>
+<label>Blikání na úvodní obrazovce
+<select id="homeFlicker"><option value="fast">Rychlé</option><option value="calm">Klidné</option></select>
+</label>
 </fieldset>
 <fieldset><legend>Výplaty za trojice</legend><p>Zadej násobky sázky. Při sázce 5 a násobku 12 automat vyplatí 60 kreditů.</p><div id="payoutInputs"></div><p id="settingsReturn"></p></fieldset>
 <fieldset><legend>Hudba a zvukové efekty</legend><button id="toggleAudio" type="button">Spustit zvuk</button></fieldset>

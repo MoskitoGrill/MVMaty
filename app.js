@@ -12,7 +12,7 @@ const settingsKey = "mvm-settings-v1";
 const roundKey = "mvm-round-v1";
 let config = {
   bet: 1, tokens: [1, 5, 10], sound: true,
-  showCredit: true, showBet: true, showPaid: true,
+  showCredit: true, showBet: true, showPaid: true, homeFlicker: "fast",
   payouts: symbols.map((symbol) => symbol[3]),
   ...read(settingsKey, {}),
 };
@@ -24,6 +24,59 @@ const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 let demoFaces = [0, 1, 2];
 let demoVersion = 0;
 let demoSpinsUntilWin = nextDemoWin();
+
+const lightPatterns = [
+  { width: 157, height: 111, x: 0.76, y: 0.27, radius: 17 },
+  { width: 173, height: 149, x: 0.31, y: 0.79, radius: 28 },
+  { width: 101, height: 133, x: 0.71, y: 0.65, radius: 26 },
+  { width: 137, height: 161, x: 0.17, y: 0.24, radius: 19 },
+];
+
+function renderBackgroundLights() {
+  const layer = $("backgroundLights");
+  const lights = document.createDocumentFragment();
+  const width = layer.clientWidth;
+  const height = layer.clientHeight;
+  lightPatterns.forEach((pattern, index) => {
+    for (let y = 0; y < height; y += pattern.height) {
+      for (let x = 0; x < width; x += pattern.width) {
+        const dot = document.createElement("span");
+        dot.className = "background-dot";
+        dot.dataset.pattern = index;
+        dot.style.left = x + pattern.width * pattern.x + "px";
+        dot.style.top = y + pattern.height * pattern.y + "px";
+        dot.style.width = pattern.radius * 2 + "px";
+        dot.style.clipPath = "inset("
+          + Math.max(0, pattern.radius - pattern.height * pattern.y) + "px "
+          + Math.max(0, pattern.radius - pattern.width * (1 - pattern.x)) + "px "
+          + Math.max(0, pattern.radius - pattern.height * (1 - pattern.y)) + "px "
+          + Math.max(0, pattern.radius - pattern.width * pattern.x) + "px)";
+        lights.append(dot);
+        const center = x + pattern.width * pattern.x;
+        const visible = center - pattern.radius < width * 0.41 || center + pattern.radius > width * 0.59;
+        if (visible && !reducedMotion.matches) flicker(dot, 0.65 + Math.random() * 0.35);
+      }
+    }
+  });
+  layer.replaceChildren(lights);
+}
+
+function flicker(dot, from) {
+  const target = Math.random() < 0.54 ? 0.85 + Math.random() * 0.15 : 0.14 + Math.random() * 0.48;
+  const fast = !round && config.homeFlicker === "fast";
+  const variation = Math.random() ** 1.4;
+  const animation = dot.animate([
+    { opacity: from, offset: 0 },
+    { opacity: from, offset: 0.15 + Math.random() * 0.58, easing: "ease-in-out" },
+    { opacity: target, offset: 1 },
+  ], { duration: fast ? 350 + variation * 1100 : 750 + variation * 4500, fill: "forwards" });
+  animation.onfinish = () => {
+    if (dot.isConnected && !reducedMotion.matches) {
+      flicker(dot, target);
+      animation.cancel();
+    }
+  };
+}
 
 function read(key, fallback) {
   try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
@@ -301,6 +354,7 @@ $("payoutInputs").addEventListener("input", updateSettingsReturn);
 $("settings").addEventListener("click", () => {
   $("betInput").value = config.bet;
   $("tokens").value = config.tokens.join(", ");
+  $("homeFlicker").value = config.homeFlicker;
   displayOptions.forEach((option) => { $(option).checked = config[option]; });
   payoutFields.forEach((input, index) => { input.value = config.payouts[index]; });
   updateSettingsReturn();
@@ -318,12 +372,14 @@ $("settingsForm").addEventListener("submit", (event) => {
   }
   config = {
     bet, tokens, sound: config.sound,
+    homeFlicker: $("homeFlicker").value,
     payouts: payoutFields.map((input) => input.valueAsNumber),
     ...Object.fromEntries(displayOptions.map((option) => [option, $(option).checked])),
   };
   save(settingsKey, config);
   $("settingsDialog").close();
   render();
+  renderBackgroundLights();
   renderPaytable();
   if (config.sound) startSound();
   else if (audio?.state === "running") audio.suspend().catch(() => {});
@@ -345,6 +401,7 @@ $("depositForm").addEventListener("submit", (event) => {
   demoVersion++;
   $("confetti").replaceChildren();
   round = { initial, balance: initial, spins: 0, wins: 0, paid: 0, last: 0, faces: [0, 1, 2], finished: false };
+  renderBackgroundLights();
   reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(round.faces[index])));
   save(roundKey, round);
   $("depositDialog").close();
@@ -356,6 +413,7 @@ $("spin").addEventListener("click", spin);
 $("quit").addEventListener("click", finish);
 $("reset").addEventListener("click", () => {
   round = null;
+  renderBackgroundLights();
   save(roundKey, round);
   $("results").close();
   $("status").textContent = "Ukázkový režim";
@@ -374,6 +432,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderPaytable();
+new ResizeObserver(renderBackgroundLights).observe($("backgroundLights"));
+reducedMotion.addEventListener("change", renderBackgroundLights);
 reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(round?.faces[index] ?? index)));
 render();
 syncSound();

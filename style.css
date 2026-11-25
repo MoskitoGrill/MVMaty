@@ -19,23 +19,36 @@ body{
     radial-gradient(ellipse at 50% 23%,#480c1c 0%,#230710 36%,transparent 69%),
     #090709;
 }
-body::before{
-  content:"";
+#backgroundLights{
   position:fixed;
   z-index:-1;
   inset:0;
   pointer-events:none;
+  overflow:hidden;
   background:
-    radial-gradient(circle at 17% 24%,#fff4ba 0, #ffc45b90 2px, #ff692d30 7px,transparent 19px) 0 0 / 137px 161px,
-    radial-gradient(circle at 71% 65%,#f2412e88 0 5px,#9f131f66 11px,transparent 26px) 0 0 / 101px 133px,
-    radial-gradient(circle at 31% 79%,#e5463e95 0 8px,#97202955 13px,transparent 28px) 0 0 / 173px 149px,
-    radial-gradient(circle at 76% 27%,#ff794a66 0 2px,#9f102538 9px,transparent 17px) 0 0 / 157px 111px,
     radial-gradient(ellipse at 0% 52%,#660c1d,transparent 50%),
     radial-gradient(ellipse at 100% 52%,#660c1d,transparent 50%);
   mask-image:linear-gradient(90deg,#000 0%,#000b 17%,transparent 41% 59%,#000b 83%,#000 100%);
 }
+.background-dot{
+  position:absolute;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+}
+.background-dot[data-pattern="3"]{
+  background:radial-gradient(circle,#fff4ba 0,#ffc45b90 2px,#ff692d30 7px,transparent 19px);
+}
+.background-dot[data-pattern="2"]{
+  background:radial-gradient(circle,#f2412e88 0 5px,#9f131f66 11px,transparent 26px);
+}
+.background-dot[data-pattern="1"]{
+  background:radial-gradient(circle,#e5463e95 0 8px,#97202955 13px,transparent 28px);
+}
+.background-dot[data-pattern="0"]{
+  background:radial-gradient(circle,#ff794a66 0 2px,#9f102538 9px,transparent 17px);
+}
 @media (max-width:42rem){
-  body::before{opacity:.55}
+  #backgroundLights{opacity:.65}
 }
 header{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem clamp(1rem,4vw,3rem);color:var(--muted)}
 header>span{font-size:.8rem;font-weight:650;letter-spacing:.055em}
@@ -136,7 +149,7 @@ h2{margin-top:0;font-family:Rockwell,Georgia,serif;color:var(--accent)}
 }
 strong{display:block;font-size:clamp(1rem,4vw,1.85rem);color:var(--accent);overflow-wrap:anywhere;font-variant-numeric:tabular-nums;text-shadow:0 0 .4em #f6a33b66}
 button{font:inherit;font-weight:700;border:1px solid var(--brass);background:linear-gradient(#4d1c2c,#281018);color:inherit;border-radius:.6rem;padding:.55rem .85rem;cursor:pointer}
-button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #ffdfa0;outline-offset:3px}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #ffdfa0;outline-offset:3px}
 button:not(:disabled):hover{filter:brightness(1.14)}
 button:disabled{opacity:.55;cursor:default}
 .primary{background:linear-gradient(#ffefb5,#efb553 57%,#d48735);color:#2c170d;border-color:#fff0b2;box-shadow:0 3px 0 #8d4826,inset 0 0 0 2px #a75f2638}
@@ -153,7 +166,7 @@ button:disabled{opacity:.55;cursor:default}
 dialog{width:min(92%,34rem);padding:1.4rem;border:2px solid transparent;border-radius:1rem;background:linear-gradient(#421326,#1a0a11) padding-box,var(--gold-metal) border-box;color:inherit;box-shadow:0 0 1.25rem #e5803355}
 dialog::backdrop{background:#0d050add}
 label{display:grid;gap:.35rem;margin:1rem 0}.check{display:flex;align-items:center}
-input{font:inherit;color:inherit;background:#210d16;border:1px solid var(--brass);border-radius:.4rem;padding:.45rem;width:100%;accent-color:var(--accent)}
+input,select{font:inherit;color:inherit;background:#210d16;border:1px solid var(--brass);border-radius:.4rem;padding:.45rem;width:100%;accent-color:var(--accent)}
 input[type=checkbox]{width:auto}#settingsError{color:#ffb5b5}.actions{margin-bottom:0}
 fieldset{margin:1rem 0;border:1px solid var(--brass);border-radius:.55rem}
 fieldset .check{margin:.45rem 0}
