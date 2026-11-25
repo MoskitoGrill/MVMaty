@@ -6,22 +6,37 @@ header{display:flex;justify-content:space-between;align-items:center;gap:1rem;pa
 .tools,.actions{display:flex;gap:.6rem;justify-content:flex-end;align-items:center}
 main{width:min(calc(100% - 1rem),52rem);margin:0 auto;text-align:center;padding-bottom:4.5rem}
 h1{
-  margin:.15em 0 .55em;
+  --bulbs:radial-gradient(circle,#fffbe1 0 1.5px,#ffc255 2px,#ee8a0433 4px,transparent 6px);
+  width:fit-content;
+  max-width:100%;
+  margin:.1em auto .48em;
+  padding:.34em clamp(.55rem,4vw,1.7rem) .39em;
+  border:1px solid #bc672c;
+  border-radius:.28em;
   font-family:Rockwell,Georgia,serif;
-  font-size:clamp(1.75rem,6.4vw,4.4rem);
+  font-size:clamp(1.45rem,6.3vw,4.1rem);
   font-weight:900;
   line-height:1.03;
-  letter-spacing:.045em;
+  letter-spacing:.065em;
   text-transform:uppercase;
   color:#ffe093;
-  text-shadow:0 2px #a65316,0 4px #552218,0 0 .45em #e78d4877;
+  background:
+    var(--bulbs) center top / 15px 13px repeat-x,
+    var(--bulbs) center bottom / 15px 13px repeat-x,
+    linear-gradient(165deg,#4a1027,#1f0a20 58%,#3e0e25);
+  box-shadow:inset 0 0 0 2px #471825,0 3px 0 #53271d,0 0 1.1rem #e4823a55;
+}
+h1 span{
+  display:inline-block;
+  color:#ffe099;
+  background:linear-gradient(#fffbe3 14%,#ffe089 44%,#c36b24 48%,#ffca62 70%,#fff1aa 87%);
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 1px #763415) drop-shadow(0 2px #61300d) drop-shadow(0 0 5px #f6a33b88);
 }
 h1 .title-accent{
-  display:inline-block;
-  font-size:1.18em;
-  letter-spacing:.12em;
-  color:#fff0ae;
-  text-shadow:0 2px #b96d23,0 4px #703311,0 0 .45em #ffb85399;
+  font-size:1.29em;
+  letter-spacing:.105em;
 }
 h2{margin-top:0}
 .machine{padding:clamp(.65rem,3vw,1.75rem);border:2px solid #ba71ff;border-radius:1.5rem;background:#140e1c;box-shadow:0 0 35px #a950ea55,inset 0 0 22px #a950ea33}
