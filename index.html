@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tři válce</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<header><span>Výuková simulace</span><div class="tools"><button id="settings" aria-label="Nastavení" title="Nastavení">⚙</button><button id="quit" hidden>Ukončit hru</button></div></header>
+<main>
+<h1>Mladej Volant<br>Automat</h1>
+<section class="machine" aria-label="Výherní automat">
+<div class="reels" aria-label="Tři kotouče"><div class="reel"></div><div class="reel"></div><div class="reel"></div></div>
+<div class="meters" id="meters"><div id="creditMeter">Kredit <strong id="credit">0</strong></div><div id="betMeter">Jedno zatočení <strong id="bet">1</strong></div><div id="paidMeter">Poslední výplata <strong id="paid">0</strong></div></div>
+<p id="homeBet" hidden></p>
+<p id="status" role="status"></p>
+<button class="primary" id="deposit">Vložit žetony</button><button class="primary" id="spin" hidden>Zatočit</button>
+<p id="keys" hidden>Enter nebo mezerník</p>
+</section>
+</main>
+<button id="help" aria-label="Nápověda a výherní tabulka" title="Nápověda a výherní tabulka" aria-haspopup="dialog">?</button>
+<dialog id="paytable" aria-labelledby="paytableTitle"><h2 id="paytableTitle">Výherní tabulka</h2><p>Výhra padne za tři stejné symboly ve střední řadě. Čísla udávají násobek sázky.</p><ul id="payouts"></ul><p class="actions"><button type="button" data-close>Zavřít</button></p></dialog>
+<dialog id="depositDialog"><form id="depositForm"><h2>Vložit žetony</h2><p id="tokenHelp"></p><label>Celková hodnota vkladu <input id="amount" type="number" required></label><p class="actions"><button type="button" data-close>Zpět</button><button class="primary">Potvrdit vklad</button></p></form></dialog>
+<dialog id="settingsDialog"><form id="settingsForm">
+<h2>Nastavení</h2>
+<label>Cena zatočení <input id="betInput" type="number" min="1" max="1000000" step="1" required></label>
+<label>Hodnoty fyzických žetonů <input id="tokens" required aria-describedby="tokenExample"></label>
+<p id="tokenExample">Zadej kredit za jeden žeton každého typu, oddělený čárkami. Například 1, 5, 10. Dva žetony po 5 a jeden po 10 pak dají vklad 20 kreditů.</p>
+<fieldset><legend>Zobrazení</legend>
+<label class="check"><input id="showCredit" type="checkbox"> Kredit</label>
+<label class="check"><input id="showBet" type="checkbox"> Cena jednoho zatočení během hry</label>
+<label class="check"><input id="showPaid" type="checkbox"> Poslední výplata</label>
+</fieldset>
+<fieldset><legend>Výplaty za trojice</legend><p>Zadej násobky sázky. Při sázce 5 a násobku 12 automat vyplatí 60 kreditů.</p><div id="payoutInputs"></div><p id="settingsReturn"></p></fieldset>
+<fieldset><legend>Hudba a zvukové efekty</legend><button id="toggleAudio" type="button">Spustit zvuk</button></fieldset>
+<p id="settingsError" role="alert"></p><p class="actions"><button type="button" data-close>Zpět</button><button class="primary">Uložit</button></p>
+</form></dialog>
+<dialog id="results"><h2>Konec kola</h2><div class="result-main"><div>Vklad<strong id="initial"></strong></div><div>K výplatě<strong id="cash"></strong></div><div>Čistý výsledek<strong id="net"></strong></div></div><p id="stats"></p><p id="roundReturn"></p><button class="primary" id="reset">Výplata hotová · nový hráč</button></dialog>
+<div id="confetti" aria-hidden="true"></div>
+</body>
+</html>
