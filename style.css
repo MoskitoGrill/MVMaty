@@ -53,7 +53,7 @@ body{
 header{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem clamp(1rem,4vw,3rem);color:var(--muted)}
 header>span{font-size:.8rem;font-weight:650;letter-spacing:.055em}
 .tools,.actions{display:flex;gap:.6rem;justify-content:flex-end;align-items:center}
-main{width:min(calc(100% - 1rem),52rem);margin:0 auto;text-align:center;padding-bottom:4.5rem}
+main{width:min(calc(100% - 1rem),52rem);margin:0 auto;text-align:center;padding-bottom:.5rem}
 h1{
   width:fit-content;
   max-width:100%;
@@ -74,7 +74,11 @@ h1{
     linear-gradient(165deg,#4a1027,#1f0a20 58%,#3e0e25);
   box-shadow:inset 0 0 0 2px #471825,0 3px 0 #53271d,0 0 1.1rem #e4823a55;
 }
-h1 span{
+.title-face{position:relative;display:block}
+.title-original{display:block}
+.title-original.is-covered{visibility:hidden}
+.title-win{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.title-line{
   display:inline-block;
   color:#ffe099;
   background:linear-gradient(#fffbe3 14%,#ffe089 44%,#c36b24 48%,#ffca62 70%,#fff1aa 87%);
@@ -86,6 +90,8 @@ h1 .title-accent{
   font-size:1.29em;
   letter-spacing:.105em;
 }
+.title-win .title-accent{max-width:100%;letter-spacing:.055em}
+.title-win .title-accent.long-amount{font-size:clamp(.9rem,4.4vw,2.75rem)}
 h2{margin-top:0;font-family:Rockwell,Georgia,serif;color:var(--accent)}
 .machine{
   --rail:clamp(.85rem,4vw,2.45rem);
@@ -154,11 +160,9 @@ button:not(:disabled):hover{filter:brightness(1.14)}
 button:disabled{opacity:.55;cursor:default}
 .primary{background:linear-gradient(#ffefb5,#efb553 57%,#d48735);color:#2c170d;border-color:#fff0b2;box-shadow:0 3px 0 #8d4826,inset 0 0 0 2px #a75f2638}
 .primary:not(:disabled):active{box-shadow:inset 0 2px 5px #873b2977}
-.machine .primary{min-width:min(100%,14rem);font-size:1.2rem;padding:.7rem;border-radius:999px;letter-spacing:.045em}
+.machine .primary{min-width:min(100%,14rem);margin-top:1rem;font-size:1.2rem;padding:.7rem;border-radius:999px;letter-spacing:.045em}
 #spin{background:radial-gradient(ellipse at 50% 19%,#ef6552,#ba2528 54%,#790e1d);color:#fff4ce;border-color:#ffce77;box-shadow:0 0 0 2px #a96129,0 3px 0 2px #552514,inset 0 0 0 2px #ffb16955;text-shadow:0 1px 2px #511224}
-#status{min-height:1.5em;color:var(--accent)}
-#keys,#homeBet{color:var(--muted)}
-#keys{margin:.65rem 0 0}
+#keys{color:var(--muted);margin:.65rem 0 0}
 #help{position:fixed;right:1rem;bottom:1rem;width:2.75rem;height:2.75rem;padding:0;border-radius:50%;font-size:1.25rem;color:var(--accent);box-shadow:inset 0 0 0 3px #281018,0 2px 10px #0008}
 #payouts{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;padding:0;list-style:none}
 #payouts li{display:flex;align-items:center;gap:.4rem;padding:.25rem .55rem;border:1px solid #864a2e;border-radius:.4rem;background:#261015;color:var(--accent)}

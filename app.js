@@ -12,7 +12,7 @@ const settingsKey = "mvm-settings-v1";
 const roundKey = "mvm-round-v1";
 let config = {
   bet: 1, tokens: [1, 5, 10], sound: true,
-  showCredit: true, showBet: true, showPaid: true, homeFlicker: "fast",
+  showCredit: true, showBet: false, showPaid: false, homeFlicker: "fast",
   payouts: symbols.map((symbol) => symbol[3]),
   ...read(settingsKey, {}),
 };
@@ -24,6 +24,45 @@ const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 let demoFaces = [0, 1, 2];
 let demoVersion = 0;
 let demoSpinsUntilWin = nextDemoWin();
+let titleAnimation;
+
+function resetTitle() {
+  titleAnimation?.cancel();
+  titleAnimation = undefined;
+  $("titleWin").hidden = true;
+  $("titleOriginal").classList.remove("is-covered");
+}
+
+async function showTitleWin(payout) {
+  const sign = $("titleSign");
+  if (!reducedMotion.matches) {
+    const outgoing = sign.animate(
+      [{ transform: "perspective(600px) rotateX(0deg)" }, { transform: "perspective(600px) rotateX(-450deg)" }],
+      { duration: 620, easing: "cubic-bezier(.4,0,.75,1)", fill: "forwards" },
+    );
+    titleAnimation = outgoing;
+    try { await outgoing.finished; } catch { return; }
+    if (titleAnimation !== outgoing) return;
+    outgoing.cancel();
+  }
+
+  const amount = number.format(payout);
+  $("titleAmount").textContent = amount;
+  $("titleAmount").classList.toggle("long-amount", amount.length > 8);
+  $("titleOriginal").classList.add("is-covered");
+  $("titleWin").hidden = false;
+  if (!reducedMotion.matches) {
+    titleAnimation = sign.animate(
+      [
+        { transform: "perspective(600px) rotateX(90deg)", easing: "ease-out" },
+        { transform: "perspective(600px) rotateX(-23deg)", offset: 0.58, easing: "ease-in-out" },
+        { transform: "perspective(600px) rotateX(7deg)", offset: 0.84, easing: "ease-out" },
+        { transform: "perspective(600px) rotateX(0deg)" },
+      ],
+      { duration: 540 },
+    );
+  }
+}
 
 const lightPatterns = [
   { width: 157, height: 111, x: 0.76, y: 0.27, radius: 17 },
@@ -127,20 +166,20 @@ function reelWindow(center) {
 }
 
 function render() {
+  const inRound = Boolean(round);
   $("credit").textContent = number.format(round?.balance ?? 0);
   $("bet").textContent = number.format(config.bet);
   $("paid").textContent = number.format(round?.last ?? 0);
-  $("creditMeter").hidden = !config.showCredit;
-  $("betMeter").hidden = !config.showBet;
-  $("paidMeter").hidden = !config.showPaid;
-  $("meters").hidden = !config.showCredit && !config.showBet && !config.showPaid;
-  $("homeBet").hidden = Boolean(round) || config.showBet;
-  $("homeBet").textContent = "Cena zatočení v kreditech: " + number.format(config.bet);
-  $("deposit").hidden = Boolean(round);
-  $("settings").hidden = Boolean(round);
-  $("spin").hidden = !round;
-  $("keys").hidden = !round;
-  $("quit").hidden = !round;
+  $("creditMeter").hidden = !inRound || !config.showCredit;
+  $("betMeter").hidden = inRound && !config.showBet;
+  $("betLabel").textContent = inRound ? "Jedno zatočení" : "Cena zatočení";
+  $("paidMeter").hidden = !inRound || !config.showPaid;
+  $("meters").hidden = inRound && !config.showCredit && !config.showBet && !config.showPaid;
+  $("deposit").hidden = inRound;
+  $("settings").hidden = inRound;
+  $("spin").hidden = !inRound;
+  $("keys").hidden = !inRound;
+  $("quit").hidden = !inRound;
   $("spin").disabled = spinning || Boolean(round?.finished);
   $("quit").disabled = spinning || Boolean(round?.finished);
 }
@@ -267,6 +306,7 @@ async function preview() {
 
 async function spin() {
   if (!round || spinning || round.finished || round.balance < config.bet) return;
+  resetTitle();
   spinning = true;
   const before = round.faces;
   const faces = [pick(), pick(), pick()];
@@ -280,11 +320,10 @@ async function spin() {
   render();
   $("credit").textContent = number.format(round.balance - payout);
   $("paid").textContent = "0";
-  $("status").textContent = "Kotouče se točí…";
   playNotes([130, 170]);
   await Promise.allSettled(reels.map((reel, index) => roll(reel, before[index], faces[index], index)));
-  $("status").textContent = payout ? (config.showPaid ? "Výhra " + number.format(payout) : "Výhra") : "Bez výhry";
   if (payout) {
+    void showTitleWin(payout);
     rain(multiplier);
     playNotes([523, 659, 784, 1047]);
   }
@@ -405,18 +444,17 @@ $("depositForm").addEventListener("submit", (event) => {
   reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(round.faces[index])));
   save(roundKey, round);
   $("depositDialog").close();
-  $("status").textContent = "Vklad přijat";
   render();
   $("spin").focus();
 });
 $("spin").addEventListener("click", spin);
 $("quit").addEventListener("click", finish);
 $("reset").addEventListener("click", () => {
+  resetTitle();
   round = null;
   renderBackgroundLights();
   save(roundKey, round);
   $("results").close();
-  $("status").textContent = "Ukázkový režim";
   demoFaces = [0, 1, 2];
   demoSpinsUntilWin = nextDemoWin();
   reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(demoFaces[index])));
@@ -438,5 +476,4 @@ reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(round?.faces[i
 render();
 syncSound();
 if (round && (round.finished || round.balance < config.bet)) finish();
-if (!round) $("status").textContent = "Ukázkový režim";
 setTimeout(preview, 650);

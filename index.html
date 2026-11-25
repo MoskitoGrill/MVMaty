@@ -11,12 +11,10 @@
 <div id="backgroundLights" aria-hidden="true"></div>
 <header><span>Výuková simulace</span><div class="tools"><button id="settings" aria-label="Nastavení" title="Nastavení">⚙</button><button id="quit" hidden>Ukončit hru</button></div></header>
 <main>
-<h1><span>Mladej Volant</span><br><span class="title-accent">Automat</span></h1>
+<h1 id="titleSign"><span class="title-face"><span id="titleOriginal" class="title-original"><span class="title-line">Mladej Volant</span><br><span class="title-line title-accent">Automat</span></span><span id="titleWin" class="title-win" hidden><span class="title-line">Výhra</span><span id="titleAmount" class="title-line title-accent"></span></span></span></h1>
 <section class="machine" aria-label="Výherní automat">
 <div class="reels" aria-label="Tři kotouče"><div class="reel"></div><div class="reel"></div><div class="reel"></div></div>
-<div class="meters" id="meters"><div id="creditMeter">Kredit <strong id="credit">0</strong></div><div id="betMeter">Jedno zatočení <strong id="bet">1</strong></div><div id="paidMeter">Poslední výplata <strong id="paid">0</strong></div></div>
-<p id="homeBet" hidden></p>
-<p id="status" role="status"></p>
+<div class="meters" id="meters"><div id="creditMeter" hidden>Kredit <strong id="credit">0</strong></div><div id="betMeter"><span id="betLabel">Cena zatočení</span> <strong id="bet">1</strong></div><div id="paidMeter" hidden>Poslední výplata <strong id="paid">0</strong></div></div>
 <button class="primary" id="deposit">Vložit žetony</button><button class="primary" id="spin" hidden>Zatočit</button>
 <p id="keys" hidden>Enter nebo mezerník</p>
 </section>
