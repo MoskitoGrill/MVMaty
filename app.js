@@ -56,11 +56,21 @@ function renderPaytable() {
   }));
 }
 
-function tile(index) {
+function tile(index, isResult = false) {
   const element = document.createElement("div");
   element.className = "symbol";
-  element.append(symbolImage(index));
+  const image = symbolImage(index);
+  if (!isResult) image.alt = "";
+  element.append(image);
   return element;
+}
+
+function reelWindow(center) {
+  return [
+    tile((center + symbols.length - 1) % symbols.length),
+    tile(center, true),
+    tile((center + 1) % symbols.length),
+  ];
 }
 
 function render() {
@@ -137,23 +147,23 @@ function startSound() {
 
 async function roll(reel, before, after, index, audible = true) {
   if (reducedMotion.matches) {
-    reel.replaceChildren(tile(after));
+    reel.replaceChildren(...reelWindow(after));
     return;
   }
-  const height = reel.clientHeight;
+  const height = reel.clientHeight / 3;
   const strip = document.createElement("div");
   strip.style.setProperty("--reel-height", height + "px");
   const decoration = Array.from({ length: 8 + index * 4 }, (_, step) => (step + index) % symbols.length);
-  strip.append(...[before, ...decoration, after].map(tile));
+  strip.append(...reelWindow(before), ...decoration.map((symbol) => tile(symbol)), ...reelWindow(after));
   reel.replaceChildren(strip);
   try {
     await strip.animate(
-      [{ transform: "translateY(0)" }, { transform: "translateY(-" + height * (decoration.length + 1) + "px)" }],
+      [{ transform: "translateY(0)" }, { transform: "translateY(-" + height * (decoration.length + 3) + "px)" }],
       { duration: 740 + index * 260, easing: "cubic-bezier(.27,.03,.22,1)", fill: "forwards" },
     ).finished;
   } finally {
     if (strip.parentElement === reel) {
-      reel.replaceChildren(tile(after));
+      reel.replaceChildren(...reelWindow(after));
       if (audible) playNotes([195 + index * 45]);
     }
   }
@@ -335,7 +345,7 @@ $("depositForm").addEventListener("submit", (event) => {
   demoVersion++;
   $("confetti").replaceChildren();
   round = { initial, balance: initial, spins: 0, wins: 0, paid: 0, last: 0, faces: [0, 1, 2], finished: false };
-  reels.forEach((reel, index) => reel.replaceChildren(tile(round.faces[index])));
+  reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(round.faces[index])));
   save(roundKey, round);
   $("depositDialog").close();
   $("status").textContent = "Vklad přijat";
@@ -351,7 +361,7 @@ $("reset").addEventListener("click", () => {
   $("status").textContent = "Ukázkový režim";
   demoFaces = [0, 1, 2];
   demoSpinsUntilWin = nextDemoWin();
-  reels.forEach((reel, index) => reel.replaceChildren(tile(demoFaces[index])));
+  reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(demoFaces[index])));
   render();
   $("deposit").focus();
 });
@@ -364,7 +374,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderPaytable();
-reels.forEach((reel, index) => reel.replaceChildren(tile(round?.faces[index] ?? index)));
+reels.forEach((reel, index) => reel.replaceChildren(...reelWindow(round?.faces[index] ?? index)));
 render();
 syncSound();
 if (round && (round.finished || round.balance < config.bet)) finish();
