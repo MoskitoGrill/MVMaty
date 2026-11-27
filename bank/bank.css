@@ -24,6 +24,10 @@
   box-shadow: inset 0 0 0 2px #263a32, 0 3px 0 #534024, 0 0 1.1rem #e4823a55;
 }
 
+.bank-name {
+  font-size: clamp(1.55rem, 7.5vw, 3.1rem);
+}
+
 .bank .machine {
   --rail: clamp(1.05rem, 6vw, 1.7rem);
   background: var(--rail-light) left center / var(--rail) 24px repeat-y padding-box,
