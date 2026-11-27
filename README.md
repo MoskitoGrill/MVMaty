@@ -6,6 +6,14 @@ Výuková simulace pro práci s fyzickými žetony. Tři vážené kotouče se l
 
 Otevři soubor index.html v aktuálním prohlížeči. Pro sdílení nahraj celý obsah této složky do repozitáře a v nastavení repozitáře zapni GitHub Pages ze složky s index.html. Všechny tři počítače mohou otevřít stejnou adresu. Každý má vlastní nastavení a vlastní kolo.
 
+## MV Casino
+
+Mobilní banka se otevírá samostatně přes `bank/index.html` nebo na GitHub Pages na adrese `/MVMaty/bank/`. Obnos a půjčky se ukládají v prohlížeči hráče.
+
+Na začátku souboru `bank/bank.js` lze změnit počáteční obnos (`startingBalance`), heslo (`password`), požadavek na heslo (`requirePassword`) a sazbu půjček. `interestMode` nabízí rostoucí sazbu (`progressive`), pevnou sazbu (`fixed`) a půjčky bez úroku (`none`). Změna počátečního obnosu se použije při založení nové hry v prohlížeči. Heslo slouží jako obslužná pojistka v prohlížeči.
+
+Půjčka ihned přidá žetony do celkového obnosu. Konečný peníz od obnosu odečte jistinu i úroky všech půjček.
+
 ## Obsluha
 
 - Ozubeným kolem na úvodní obrazovce nastav hodnoty žetonů, cenu zatočení, výplaty za trojice a zobrazené údaje. V nastavení je také tlačítko pro spuštění a vypnutí hudby se zvukovými efekty. Volba zvuku se ukládá hned.

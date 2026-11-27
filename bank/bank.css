@@ -1,0 +1,71 @@
+.bank {
+  --bank-green: #314840;
+  background: radial-gradient(ellipse at 50% 26%, var(--bank-green), #162820 55%, #080e0c);
+  background-attachment: fixed;
+}
+
+.bank main {
+  width: min(calc(100% - 1.5rem), 28rem);
+}
+
+.first-screen {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 2rem;
+}
+
+.bank h1 {
+  font-size: clamp(2.35rem, 10vw, 3.8rem);
+  background: var(--bulbs) center top / 15px 13px repeat-x,
+    var(--bulbs) center bottom / 15px 13px repeat-x,
+    linear-gradient(165deg, var(--bank-green), #131e1a);
+  box-shadow: inset 0 0 0 2px #263a32, 0 3px 0 #534024, 0 0 1.1rem #e4823a55;
+}
+
+.bank .machine {
+  --rail: clamp(1.05rem, 6vw, 1.7rem);
+  background: var(--rail-light) left center / var(--rail) 24px repeat-y padding-box,
+    var(--rail-light) right center / var(--rail) 24px repeat-y padding-box,
+    linear-gradient(90deg, #1a2b24, #476357 var(--rail), transparent var(--rail) calc(100% - var(--rail)), #476357 calc(100% - var(--rail)), #1a2b24) padding-box,
+    linear-gradient(var(--bank-green), #20312a) padding-box,
+    var(--gold-metal) border-box;
+  box-shadow: inset 0 0 0 3px #293b31, 0 0 1.4rem #f1953d55, 0 .7rem 2rem #0009;
+}
+
+.bank .meters { margin-top: 0; }
+.bank .meters > div { background: linear-gradient(#101a16, #1d3028); font-size: 1rem; }
+.bank .meters strong { font-size: clamp(2rem, 10vw, 3.3rem); }
+
+.bank-buttons {
+  display: grid;
+  gap: .8rem;
+  margin-top: 1rem;
+}
+
+.bank .bank-buttons .primary {
+  margin: 0;
+  min-height: 3.15rem;
+  padding: .7rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  letter-spacing: .045em;
+}
+
+.bank .secondary-actions {
+  margin: 0 auto;
+  padding: 1.25rem clamp(1.25rem, 6vw, 1.9rem) 2rem;
+}
+
+.bank dialog {
+  background: linear-gradient(var(--bank-green), #17251e) padding-box, var(--gold-metal) border-box;
+}
+
+.bank dialog::backdrop { background: #080e0cdd; }
+.bank button:not(.primary), .bank input { background: #17251e; }
+.bank input { min-height: 2.75rem; font-size: 1rem; }
+.bank .error { color: #ffc2b5; }
+.bank dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-block: .65rem; }
+.bank dd { margin: 0; text-align: right; overflow-wrap: anywhere; min-width: 0; }
+.bank .result-total { padding-top: .8rem; border-top: 1px solid var(--brass); }

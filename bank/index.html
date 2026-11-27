@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#314840">
+  <title>MV Casino</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="bank.css">
+  <script src="bank.js" defer></script>
+</head>
+<body class="bank">
+  <main>
+    <div class="first-screen">
+      <h1><span class="title-line">MV</span><br><span class="title-line title-accent">Casino</span></h1>
+      <section class="machine" aria-label="Herní obnos">
+        <div class="meters"><div>Celkový obnos <strong id="balance" aria-live="polite"></strong></div></div>
+        <form id="transaction" hidden>
+          <label>Kolik <input id="amount" inputmode="numeric" pattern="[0-9]+" required autocomplete="off"></label>
+          <p id="transaction-error" class="error" role="alert" hidden></p>
+          <div class="actions">
+            <button type="button" id="cancel-transaction">Zpět</button>
+            <button type="submit" id="confirm-transaction"></button>
+          </div>
+        </form>
+        <div class="bank-buttons" id="game-actions">
+          <button class="primary" id="bet-credit">Vsadit</button>
+          <button class="primary" id="collect">Pobrat výhru</button>
+        </div>
+        <p id="storage-warning" class="error" role="status" hidden>Změny se v tomto prohlížeči nepodařilo uložit.</p>
+      </section>
+    </div>
+    <section class="bank-buttons secondary-actions" aria-label="Banka a konečný výsledek">
+      <button class="primary" id="borrow" aria-haspopup="dialog">Půjčit si</button>
+      <button class="primary" id="settlement" aria-haspopup="dialog">Konečný peníz</button>
+    </section>
+  </main>
+  <dialog id="password-dialog" aria-labelledby="password-title">
+    <h2 id="password-title"></h2>
+    <form id="password-form">
+      <label>Heslo <input id="password" type="password" required autocomplete="off" autofocus></label>
+      <p id="password-error" class="error" role="alert" hidden></p>
+      <div class="actions">
+        <button type="button" data-close>Zpět</button>
+        <button type="submit" class="primary">Pokračovat</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="loan-dialog" aria-labelledby="loan-title">
+    <h2 id="loan-title">Půjčit si</h2>
+    <form id="loan-form">
+      <label>Kolik <input id="loan-amount" inputmode="numeric" pattern="[0-9]+" required autocomplete="off" autofocus></label>
+      <p id="loan-rate"></p>
+      <p id="loan-error" class="error" role="alert" hidden></p>
+      <div class="actions">
+        <button type="button" data-close>Zpět</button>
+        <button type="submit" class="primary">Potvrdit půjčku</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="result-dialog" aria-labelledby="result-title">
+    <h2 id="result-title">Konečný peníz</h2>
+    <dl>
+      <div><dt>Celkový obnos</dt><dd id="result-balance"></dd></div>
+      <div><dt>Půjčeno</dt><dd id="result-principal"></dd></div>
+      <div><dt>Úrok celkem</dt><dd id="result-interest"></dd></div>
+      <div class="result-total"><dt>Po splacení půjček</dt><dd><strong id="result-total"></strong></dd></div>
+    </dl>
+    <div class="actions"><button type="button" class="primary" data-close>Zavřít</button></div>
+  </dialog>
+</body>
+</html>
