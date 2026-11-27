@@ -20,7 +20,7 @@
 </section>
 </main>
 <button id="help" aria-label="Nápověda a výherní tabulka" title="Nápověda a výherní tabulka" aria-haspopup="dialog">?</button>
-<dialog id="paytable" aria-labelledby="paytableTitle"><h2 id="paytableTitle">Výherní tabulka</h2><p>Výhra padne za tři stejné symboly ve střední řadě. Čísla udávají násobek sázky.</p><ul id="payouts"></ul><p class="actions"><button type="button" data-close>Zavřít</button></p></dialog>
+<dialog id="paytable" aria-labelledby="paytableTitle"><h2 id="paytableTitle">Výherní tabulka</h2><p>Výhra padne za tři stejné symboly ve střední řadě. Čísla udávají výplatu v žetonech při aktuální ceně zatočení.</p><ul id="payouts"></ul><p class="actions"><button type="button" data-close>Zavřít</button></p></dialog>
 <dialog id="depositDialog"><form id="depositForm"><h2>Vložit žetony</h2><p id="tokenHelp"></p><label>Celková hodnota vkladu <input id="amount" type="number" required></label><p class="actions"><button type="button" data-close>Zpět</button><button class="primary">Potvrdit vklad</button></p></form></dialog>
 <dialog id="settingsDialog"><form id="settingsForm">
 <h2>Nastavení</h2>
@@ -35,7 +35,7 @@
 <select id="homeFlicker"><option value="fast">Rychlé</option><option value="calm">Klidné</option></select>
 </label>
 </fieldset>
-<fieldset><legend>Výplaty za trojice</legend><p>Zadej násobky sázky. Při sázce 5 a násobku 12 automat vyplatí 60 kreditů.</p><div id="payoutInputs"></div><p id="settingsReturn"></p></fieldset>
+<fieldset><legend>Výplaty za trojice</legend><p>Zadej násobky sázky. Při sázce 100 a násobku 0,9 automat vyplatí 90 žetonů. Výplaty se zaokrouhlují na celé žetony a za trojici je výplata nejméně 1 žeton.</p><div id="payoutInputs"></div><p id="settingsReturn"></p></fieldset>
 <fieldset><legend>Hudba a zvukové efekty</legend><button id="toggleAudio" type="button">Spustit zvuk</button></fieldset>
 <p id="settingsError" role="alert"></p><p class="actions"><button type="button" data-close>Zpět</button><button class="primary">Uložit</button></p>
 </form></dialog>

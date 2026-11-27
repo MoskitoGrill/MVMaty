@@ -1,6 +1,6 @@
 # Tři válce
 
-Výuková simulace pro práci s fyzickými žetony. Tři vážené kotouče se losují nezávisle. Za trojici stejných symbolů se vyplácí násobek pevné sázky podle výherní tabulky. Teoretická návratnost ve výchozím nastavení činí 90,3976 %.
+Výuková simulace pro práci s fyzickými žetony. Tři vážené kotouče se losují nezávisle. Za trojici stejných symbolů se vyplácí násobek pevné sázky podle výherní tabulky. Teoretická návratnost ve výchozím nastavení činí 90,28 %.
 
 ## Spuštění
 
@@ -25,14 +25,14 @@ Půjčka ihned přidá žetony do celkového obnosu. Konečný peníz od obnosu 
 
 Obrázky jsou ve složce assets/symbols. Pro výměnu zachovej název souboru a formát PNG. Výchozí obrázky jsou čtvercové, mají 256 × 256 px a průhledné pozadí.
 
-| Soubor | Výchozí symbol | Výchozí výplata za trojici |
+| Soubor | Výchozí symbol | Výplata za trojici při sázce 100 |
 | --- | --- | ---: |
-| cherry.png | Třešně | 12× |
-| lemon.png | Citron | 15× |
-| plum.png | Švestka | 25× |
-| bell.png | Zvonek | 50× |
-| star.png | Hvězda | 100× |
-| diamond.png | Diamant | 250× |
-| seven.png | Sedmička | 500× |
+| cherry.png | Třešně | 90 |
+| lemon.png | Citron | 2 400 |
+| plum.png | Švestka | 5 000 |
+| bell.png | Zvonek | 8 000 |
+| star.png | Hvězda | 14 000 |
+| diamond.png | Diamant | 50 000 |
+| seven.png | Sedmička | 100 000 |
 
 Pokud se změní i význam symbolu, uprav jeho český popis v seznamu symbols na začátku app.js. Prohlížeč tento popis používá místo obrázku při čtení obrazovky.

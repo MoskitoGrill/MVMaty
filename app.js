@@ -1,8 +1,8 @@
 const symbols = [
-  ["cherry", "Třešně", 32, 12], ["lemon", "Citron", 24, 15],
-  ["plum", "Švestka", 18, 25], ["bell", "Zvonek", 12, 50],
-  ["star", "Hvězda", 8, 100], ["diamond", "Diamant", 4, 250],
-  ["seven", "Sedmička", 2, 500],
+  ["cherry", "Třešně", 32, 0.9], ["lemon", "Citron", 24, 24],
+  ["plum", "Švestka", 18, 50], ["bell", "Zvonek", 12, 80],
+  ["star", "Hvězda", 8, 140], ["diamond", "Diamant", 4, 500],
+  ["seven", "Sedmička", 2, 1000],
 ];
 const $ = (id) => document.getElementById(id);
 const number = new Intl.NumberFormat("cs");
@@ -10,12 +10,15 @@ const signed = new Intl.NumberFormat("cs", { signDisplay: "exceptZero" });
 const percent = new Intl.NumberFormat("cs", { style: "percent", maximumFractionDigits: 2 });
 const settingsKey = "mvm-settings-v1";
 const roundKey = "mvm-round-v1";
+const defaultPayouts = symbols.map((symbol) => symbol[3]);
+const previousDefaultPayouts = "12,15,25,50,100,250,500";
 let config = {
   bet: 100, tokens: [1, 5, 10], sound: true,
   showCredit: true, showBet: false, showPaid: false, homeFlicker: "fast",
-  payouts: symbols.map((symbol) => symbol[3]),
+  payouts: defaultPayouts,
   ...read(settingsKey, {}),
 };
+if (config.payouts.join(",") === previousDefaultPayouts) config.payouts = defaultPayouts;
 let round = read(roundKey, null);
 let spinning = false;
 let audio;
@@ -136,14 +139,19 @@ function symbolImage(index) {
   return image;
 }
 
-function formatReturn(payouts) {
-  return percent.format(symbols.reduce((total, symbol, index) => total + (symbol[2] / 100) ** 3 * payouts[index], 0));
+function payoutFor(bet, multiplier) {
+  return Math.max(1, Math.round(bet * multiplier));
+}
+
+function formatReturn(payouts, bet = config.bet) {
+  const expected = symbols.reduce((total, symbol, index) => total + (symbol[2] / 100) ** 3 * payoutFor(bet, payouts[index]), 0);
+  return percent.format(expected / bet);
 }
 
 function renderPaytable() {
   $("payouts").replaceChildren(...symbols.map((_, index) => {
     const item = document.createElement("li");
-    item.append(symbolImage(index), "×" + number.format(config.payouts[index]));
+    item.append(symbolImage(index), number.format(payoutFor(config.bet, config.payouts[index])));
     return item;
   }));
 }
@@ -311,7 +319,7 @@ async function spin() {
   const before = round.faces;
   const faces = [pick(), pick(), pick()];
   const multiplier = faces.every((face) => face === faces[0]) ? config.payouts[faces[0]] : 0;
-  const payout = multiplier * config.bet;
+  const payout = multiplier ? payoutFor(config.bet, multiplier) : 0;
   round = {
     ...round, faces, last: payout, balance: round.balance - config.bet + payout,
     spins: round.spins + 1, wins: round.wins + Number(payout > 0), paid: round.paid + payout,
@@ -374,9 +382,9 @@ const payoutFields = symbols.map((symbol) => {
   const label = document.createElement("label");
   const input = document.createElement("input");
   input.type = "number";
-  input.min = "1";
+  input.min = "0.01";
   input.max = "10000";
-  input.step = "1";
+  input.step = "0.01";
   input.required = true;
   label.append(symbol[1], input);
   $("payoutInputs").append(label);
@@ -384,12 +392,14 @@ const payoutFields = symbols.map((symbol) => {
 });
 
 function updateSettingsReturn() {
-  $("settingsReturn").textContent = payoutFields.every((input) => input.validity.valid)
-    ? "Teoretická návratnost: " + formatReturn(payoutFields.map((input) => input.valueAsNumber))
+  const bet = $("betInput");
+  $("settingsReturn").textContent = bet.validity.valid && payoutFields.every((input) => input.validity.valid)
+    ? "Teoretická návratnost: " + formatReturn(payoutFields.map((input) => input.valueAsNumber), bet.valueAsNumber)
     : "";
 }
 
 $("payoutInputs").addEventListener("input", updateSettingsReturn);
+$("betInput").addEventListener("input", updateSettingsReturn);
 $("settings").addEventListener("click", () => {
   $("betInput").value = config.bet;
   $("tokens").value = config.tokens.join(", ");
