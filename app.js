@@ -11,7 +11,7 @@ const percent = new Intl.NumberFormat("cs", { style: "percent", maximumFractionD
 const settingsKey = "mvm-settings-v1";
 const roundKey = "mvm-round-v1";
 let config = {
-  bet: 1, tokens: [1, 5, 10], sound: true,
+  bet: 100, tokens: [1, 5, 10], sound: true,
   showCredit: true, showBet: false, showPaid: false, homeFlicker: "fast",
   payouts: symbols.map((symbol) => symbol[3]),
   ...read(settingsKey, {}),
