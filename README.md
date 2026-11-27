@@ -6,7 +6,7 @@ Výuková simulace pro práci s fyzickými žetony. Tři vážené kotouče se l
 
 Otevři soubor index.html v aktuálním prohlížeči. Pro sdílení nahraj celý obsah této složky do repozitáře a v nastavení repozitáře zapni GitHub Pages ze složky s index.html. Všechny tři počítače mohou otevřít stejnou adresu. Každý má vlastní nastavení a vlastní kolo.
 
-## MladejVolant Casino
+## MV Casino
 
 Mobilní banka se otevírá samostatně přes `bank/index.html` nebo na GitHub Pages na adrese `/MVMaty/bank/`. Obnos a půjčky se ukládají v prohlížeči hráče.
 
