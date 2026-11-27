@@ -1,6 +1,6 @@
 // Nastavení akce. Počáteční obnos platí pro nový prohlížeč bez uložené hry.
 const config = {
-  startingBalance: 500,
+  startingBalance: 5000,
   requirePassword: true,
   password: "2711",
   // "progressive" = rostoucí až po maximum, "fixed" = stejný, "none" = bez úroku.
